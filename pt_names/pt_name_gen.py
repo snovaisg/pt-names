@@ -5,6 +5,8 @@ import csv
 import random
 from unidecode import unidecode
 from typing import Optional
+import importlib.resources
+from pt_names import data_files
 
 class Person:
     def __init__(self, first_name: str, last_name: str, gender: int) -> None:
@@ -13,6 +15,10 @@ class Person:
         self.gender = gender
         self.email = self.get_email()
         self.full_name = self.get_full_name()
+    
+    def __repr__(self) -> str:
+        # show first and last names as well as gender and full name in a nice format
+        return f"Person(first_name={self.first_name},last_name={self.last_name},gender={self.gender})"
 
     def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
@@ -27,7 +33,7 @@ class Person:
 def read_names_from_csv(file_name: str) -> dict:
     names = {"M": [], "F": []}
 
-    with importlib.resources.open_text("pt_name_gen", file_name) as csvfile:
+    with importlib.resources.open_text(data_files, file_name) as csvfile:
         csv_reader = csv.DictReader(csvfile)
     
         for row in csv_reader:
@@ -52,7 +58,7 @@ def generate_name(gender: Optional[int] = None) -> str:
     men_names = names["M"]
     women_names = names["F"]
 
-    with importlib.resources.open_text("pt_name_gen", "last_names.csv") as csvfile:
+    with importlib.resources.open_text(data_files, "last_names.csv") as csvfile:
         surnames = [row["last_name"] for row in csv.DictReader(csvfile)]
 
     try:

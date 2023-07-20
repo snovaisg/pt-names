@@ -46,11 +46,13 @@ class GenderClassifier:
         """
         Find the gender of the given name in the CSV file.
 
+        looks only at the first word passed in the name string.
+
         Args:
             name (str): The name to search for.
 
         Returns:
             Optional[str]: The gender of the name if found, otherwise None.
         """
-        name = name.upper()
+        name = name.upper().split(" ")[0].strip()
         return self.name_data.get(name, None)
